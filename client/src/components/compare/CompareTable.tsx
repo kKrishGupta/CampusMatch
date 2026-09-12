@@ -201,6 +201,45 @@ export const CompareTable: React.FC<CompareTableProps> = ({ colleges, onRemove }
                 </td>
               ))}
             </tr>
+
+            {/* Row: Highlights Badges (Matching Reference UI) */}
+            <tr className="hover:bg-slate-50/50 transition-colors">
+              <td className="p-4 font-bold text-slate-800 bg-slate-50/30 sticky left-0 z-10 border-r border-slate-200">
+                Highlights
+              </td>
+              {colleges.map((c) => {
+                const isHighestPlacement = c.highestPlacementLpa === highestMaxPlacement;
+                const isLowestFee = c.feesAnnual === lowestFees;
+                const isHighestAvg = c.averagePlacementLpa === highestAvgPlacement;
+
+                return (
+                  <td key={c.id} className="p-4">
+                    <div className="flex flex-wrap gap-1.5">
+                      {isHighestPlacement && (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          Highest Placement
+                        </span>
+                      )}
+                      {isLowestFee && (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 border border-blue-200">
+                          Best Value
+                        </span>
+                      )}
+                      {isHighestAvg && (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
+                          Top Placement
+                        </span>
+                      )}
+                      {!isHighestPlacement && !isLowestFee && !isHighestAvg && (
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                          {c.type} Institute
+                        </span>
+                      )}
+                    </div>
+                  </td>
+                );
+              })}
+            </tr>
           </tbody>
         </table>
       </div>

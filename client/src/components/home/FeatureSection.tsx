@@ -1,66 +1,65 @@
+'use client';
+
 import React from 'react';
-import { ShieldCheck, BarChart3, Star, Layers, Users, Zap } from 'lucide-react';
+import { Database, GitCompare, UserCheck, ShieldCheck } from 'lucide-react';
 
 export const FeatureSection: React.FC = () => {
   const features = [
     {
-      icon: <ShieldCheck className="w-5 h-5 text-indigo-600" />,
-      title: 'Verified Placement Data',
-      description: 'Access authentic highest, average, and median package stats directly from annual placement reports.',
+      icon: <Database className="w-6 h-6 text-blue-600" />,
+      title: 'Comprehensive Data',
+      description: 'Real insights on fees, placements, reviews and more.',
+      bg: 'bg-blue-50',
+      border: 'border-blue-100',
     },
     {
-      icon: <BarChart3 className="w-5 h-5 text-indigo-600" />,
-      title: 'Side-by-Side Matrix',
-      description: 'Compare 2 to 3 colleges on key metrics including annual fees, ratings, top recruiters, and NIRF rankings.',
+      icon: <GitCompare className="w-6 h-6 text-purple-600" />,
+      title: 'Smart Comparison',
+      description: 'Compare 2-3 colleges side by side.',
+      bg: 'bg-purple-50',
+      border: 'border-purple-100',
     },
     {
-      icon: <Star className="w-5 h-5 text-indigo-600" />,
-      title: 'Genuine Student Reviews',
-      description: 'Read unvarnished pros and cons written by current students and passout alumni.',
+      icon: <UserCheck className="w-6 h-6 text-cyan-600" />,
+      title: 'Student First',
+      description: 'Built to help you make confident decisions.',
+      bg: 'bg-cyan-50',
+      border: 'border-cyan-100',
     },
     {
-      icon: <Layers className="w-5 h-5 text-indigo-600" />,
-      title: 'Multi-Parameter Filters',
-      description: 'Filter instantly by location, city, state, course stream, tuition budget, and institute type.',
-    },
-    {
-      icon: <Users className="w-5 h-5 text-indigo-600" />,
-      title: 'Course & Fee Transparency',
-      description: 'Break down course degrees, duration, eligibility requirements, and total seat capacities.',
-    },
-    {
-      icon: <Zap className="w-5 h-5 text-indigo-600" />,
-      title: 'Instant URL State & Save',
-      description: 'Bookmark saved colleges and share search filter links effortlessly with family and mentors.',
+      icon: <ShieldCheck className="w-6 h-6 text-emerald-600" />,
+      title: 'Trusted & Updated',
+      description: 'Regularly updated with latest information.',
+      bg: 'bg-emerald-50',
+      border: 'border-emerald-100',
     },
   ];
 
   return (
-    <section className="py-16 bg-slate-900 text-white">
+    <section className="py-16 bg-slate-50 border-b border-slate-200/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 block mb-2">
-            Why CampusMatch
-          </span>
-          <h2 className="text-3xl font-black tracking-tight text-white">
-            Built for Students & Parents Who Value Clarity
+        <div className="text-left mb-10">
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900">
+            Why CampusMatch?
           </h2>
-          <p className="text-slate-400 text-sm mt-2">
-            We cut through marketing noise to bring you structured, objective data for India’s top colleges.
+          <p className="text-slate-600 text-sm mt-1 font-medium">
+            Empowering students across India with objective data and intelligent decision tools.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((f, idx) => (
             <div
               key={idx}
-              className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 hover:border-indigo-500/50 transition-all group"
+              className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 space-y-4"
             >
-              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <div className={`w-12 h-12 rounded-2xl ${f.bg} ${f.border} border flex items-center justify-center`}>
                 {f.icon}
               </div>
-              <h3 className="text-lg font-bold text-white mb-1.5">{f.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{f.description}</p>
+              <div>
+                <h3 className="text-lg font-extrabold text-slate-900 mb-1">{f.title}</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-medium">{f.description}</p>
+              </div>
             </div>
           ))}
         </div>
