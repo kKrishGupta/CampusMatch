@@ -22,7 +22,7 @@ function CollegesContent() {
 
   // Parse initial filter params from URL search parameters
   const getParamsFromUrl = useCallback((): CollegeFilterParams => {
-    const search = searchParams.get('search') || '';
+    const search = searchParams.get('search') || searchParams.get('query') || searchParams.get('q') || '';
     const state = searchParams.get('state') || 'All';
     const city = searchParams.get('city') || 'All';
     const minFees = searchParams.get('minFees') ? Number(searchParams.get('minFees')) : undefined;
