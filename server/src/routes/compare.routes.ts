@@ -1,8 +1,9 @@
+import { Router } from 'express';
 import { CompareController } from '../controllers/compare.controller';
 
-export function setupCompareRoutes() {
-  const controller = new CompareController();
-  return {
-    compareColleges: (req: any, res: any) => controller.compareColleges(req, res),
-  };
-}
+const router = Router();
+const controller = new CompareController();
+
+router.post('/', (req, res) => controller.compareColleges(req, res));
+
+export default router;

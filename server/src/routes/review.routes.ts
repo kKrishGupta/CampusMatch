@@ -1,9 +1,10 @@
+import { Router } from 'express';
 import { ReviewController } from '../controllers/review.controller';
 
-export function setupReviewRoutes() {
-  const controller = new ReviewController();
-  return {
-    getReviews: (req: any, res: any) => controller.getCollegeReviews(req, res),
-    createReview: (req: any, res: any) => controller.createReview(req, res),
-  };
-}
+const router = Router();
+const controller = new ReviewController();
+
+router.get('/:collegeId', (req, res) => controller.getCollegeReviews(req, res));
+router.post('/', (req, res) => controller.createReview(req, res));
+
+export default router;

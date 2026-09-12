@@ -1,9 +1,10 @@
+import { Router } from 'express';
 import { CollegeController } from '../controllers/college.controller';
 
-export function setupCollegeRoutes() {
-  const controller = new CollegeController();
-  return {
-    getColleges: (req: any, res: any) => controller.getColleges(req, res),
-    getCollegeById: (req: any, res: any) => controller.getCollegeById(req, res),
-  };
-}
+const router = Router();
+const controller = new CollegeController();
+
+router.get('/', (req, res) => controller.getColleges(req, res));
+router.get('/:id', (req, res) => controller.getCollegeById(req, res));
+
+export default router;

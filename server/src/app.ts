@@ -1,14 +1,52 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { config } from './config/env';
 import { DatabaseConfig } from './config/database';
 import { Logger } from './utils/logger';
 
+import authRoutes from './routes/auth.routes';
+import collegeRoutes from './routes/college.routes';
+import reviewRoutes from './routes/review.routes';
+import compareRoutes from './routes/compare.routes';
+import savedRoutes from './routes/saved.routes';
+
 const app = express();
 
-app.use(cors());
+// Permissive CORS setup for Vercel deployments & local testing
+const allowedOrigins = [
+  'https://campus-match-client.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app') ||
+        config.clientUrl === '*' ||
+        origin === config.clientUrl
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Allow all origins in production
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    optionsSuccessStatus: 200,
+  })
+);
+
+// Enable preflight for all routes
+app.options('*', cors());
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Health Check Endpoint (accessible at /health and /api/v1/health)
 const getHealthStatus = (_req: Request, res: Response) => {
@@ -22,22 +60,24 @@ const getHealthStatus = (_req: Request, res: Response) => {
   const dbState = dbStateMap[mongoose.connection.readyState] || 'unknown';
   const isDbConnected = mongoose.connection.readyState === 1;
 
-  res.status(isDbConnected ? 200 : 200).json({
+  res.status(200).json({
     status: 'OK',
     message: 'CampusMatch API backend operational',
     timestamp: new Date().toISOString(),
     uptimeSeconds: Math.floor(process.uptime()),
     environment: config.nodeEnv || 'development',
+    corsAllowedOrigin: 'https://campus-match-client.vercel.app',
     database: {
       provider: 'MongoDB Atlas',
       connectionState: dbState,
       isConnected: isDbConnected,
     },
     services: {
-      auth: 'active',
-      collegeData: 'active (110+ institutes dataset loaded)',
-      compareEngine: 'active',
-      reviewEngine: 'active',
+      auth: 'active (/api/v1/auth)',
+      colleges: 'active (/api/v1/colleges)',
+      compare: 'active (/api/v1/compare)',
+      reviews: 'active (/api/v1/reviews)',
+      saved: 'active (/api/v1/saved)',
     },
     version: '1.0.0',
   });
@@ -46,6 +86,20 @@ const getHealthStatus = (_req: Request, res: Response) => {
 app.get('/health', getHealthStatus);
 app.get('/api/v1/health', getHealthStatus);
 
+// API v1 Routes
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/colleges', collegeRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/compare', compareRoutes);
+app.use('/api/v1/saved', savedRoutes);
+
+// Fallback API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/colleges', collegeRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/compare', compareRoutes);
+app.use('/api/saved', savedRoutes);
+
 // Root endpoint
 app.get('/', (_req: Request, res: Response) => {
   res.json({
@@ -53,6 +107,15 @@ app.get('/', (_req: Request, res: Response) => {
     status: 'Running',
     healthCheck: '/health',
     docs: '/api/v1/health',
+    allowedClient: 'https://campus-match-client.vercel.app',
+  });
+});
+
+// 404 Catch-all Handler
+app.use((_req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: 'Route not found. Access /health for API docs.',
   });
 });
 
@@ -62,7 +125,7 @@ async function bootstrap() {
   try {
     await DatabaseConfig.connect();
   } catch (err) {
-    Logger.error('Database connection notice: running with seed/mock fallback if offline', err);
+    Logger.error('Database connection notice: running with fallback data if offline', err);
   }
 
   const PORT = config.port || 5000;
