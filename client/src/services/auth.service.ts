@@ -6,7 +6,7 @@ const DEFAULT_USER: User = {
   id: 'usr-101',
   name: 'Krish Gupta',
   email: 'kg20060220@gmail.com',
-  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
+  avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&h=200&q=80',
   savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd', 'bits-pilani-main-campus'],
   targetCourse: 'B.Tech Computer Science & Engineering',
   targetCity: 'Delhi / NCR',
@@ -22,7 +22,12 @@ export class AuthService {
         localStorage.setItem(AUTH_USER_KEY, JSON.stringify(DEFAULT_USER));
         return DEFAULT_USER;
       }
-      return JSON.parse(data);
+      const parsed = JSON.parse(data);
+      if (parsed.avatarUrl?.includes('photo-1534528741775-53994a69daeb')) {
+        parsed.avatarUrl = DEFAULT_USER.avatarUrl;
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(parsed));
+      }
+      return parsed;
     } catch {
       return DEFAULT_USER;
     }
