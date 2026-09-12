@@ -57,6 +57,11 @@ export function getCollegeLogoUrl(collegeName: string, logoUrl?: string): string
   return campusPhotos[charSum % campusPhotos.length];
 }
 
+export function getCollegeUiAvatarUrl(collegeName: string): string {
+  const initials = getInitials(collegeName);
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=0B132B&color=fff&bold=true&size=128`;
+}
+
 export function getCollegeBannerUrl(collegeId: string, bannerUrl?: string): string {
   if (bannerUrl && bannerUrl.startsWith('http') && !bannerUrl.includes('photo-1541339907198?') && !bannerUrl.includes('photo-1541339907198')) {
     return bannerUrl;
