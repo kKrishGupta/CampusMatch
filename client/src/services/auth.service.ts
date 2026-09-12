@@ -6,7 +6,7 @@ const DEFAULT_USER: User = {
   id: 'usr-101',
   name: 'Krish Gupta',
   email: 'kg20060220@gmail.com',
-  avatarUrl: 'https://ui-avatars.com/api/?name=Krish+Gupta&background=1E1B4B&color=818CF8&bold=true&size=200',
+  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80',
   savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd', 'bits-pilani-main-campus'],
   targetCourse: 'B.Tech Computer Science & Engineering',
   targetCity: 'Delhi / NCR',
