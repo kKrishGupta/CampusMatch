@@ -150,6 +150,8 @@ export class CollegeService {
   }
 
   public static async getCollegesByIds(ids: string[]): Promise<College[]> {
-    return MOCK_COLLEGES.filter((c) => ids.includes(c.id));
+    return MOCK_COLLEGES.filter((c) =>
+      ids.some((id) => c.id === id || c.slug === id || c.id.includes(id) || id.includes(c.id))
+    );
   }
 }

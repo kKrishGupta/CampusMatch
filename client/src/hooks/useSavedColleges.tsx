@@ -26,6 +26,7 @@ export const SavedProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const loadSaved = useCallback(async (ids: string[]) => {
     if (ids.length === 0) {
+      setSavedIds([]);
       setSavedColleges([]);
       setIsLoading(false);
       return;
@@ -34,7 +35,11 @@ export const SavedProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const colleges = await CollegeService.getCollegesByIds(ids);
       setSavedColleges(colleges);
+      // Sync savedIds to only count colleges that actually exist
+      const validIds = colleges.map((c) => c.id);
+      setSavedIds(validIds);
     } catch {
+      setSavedIds([]);
       setSavedColleges([]);
     } finally {
       setIsLoading(false);
@@ -49,27 +54,39 @@ export const SavedProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       return;
     }
     const ids = SavedCollegeService.getSavedIds();
-    setSavedIds(ids);
     loadSaved(ids);
   }, [loadSaved, user, isAuthenticated]);
 
   const toggleSave = useCallback(
     (college: College) => {
       const result = SavedCollegeService.toggleSave(college.id);
-      setSavedIds(result.savedIds);
-
       if (result.isSaved) {
-        setSavedColleges((prev) => [...prev, college]);
+        setSavedColleges((prev) => {
+          const exists = prev.some((c) => c.id === college.id);
+          const next = exists ? prev : [...prev, college];
+          setSavedIds(next.map((c) => c.id));
+          return next;
+        });
         showToast(`Saved ${college.name}`, 'success');
       } else {
-        setSavedColleges((prev) => prev.filter((c) => c.id !== college.id));
+        setSavedColleges((prev) => {
+          const next = prev.filter((c) => c.id !== college.id && c.slug !== college.id);
+          setSavedIds(next.map((c) => c.id));
+          return next;
+        });
         showToast(`Removed ${college.name} from saved`, 'info');
       }
     },
     [showToast]
   );
 
-  const isSaved = useCallback((collegeId: string) => savedIds.includes(collegeId), [savedIds]);
+  const isSaved = useCallback(
+    (collegeId: string) =>
+      savedColleges.some(
+        (c) => c.id === collegeId || c.slug === collegeId || c.id.includes(collegeId) || collegeId.includes(c.id)
+      ) || savedIds.includes(collegeId),
+    [savedColleges, savedIds]
+  );
 
   return (
     <SavedContext.Provider

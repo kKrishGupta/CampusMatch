@@ -72,7 +72,7 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, className = '
           <Rating value={college.rating} reviewsCount={college.reviewsCount} size="sm" />
           <div className="text-right">
             <span className="text-[10px] text-slate-400 font-bold block uppercase">Tuition</span>
-            <span className="text-xs font-extrabold text-slate-900">{formatCurrency(college.feesAnnual)}/yr</span>
+            <span className="text-xs font-extrabold text-slate-900">{formatCurrency(college.feesAnnual)}</span>
           </div>
         </div>
 

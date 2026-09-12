@@ -25,7 +25,8 @@ export const Navbar: React.FC = () => {
 
   const { user, isAuthenticated, logout } = useAuth();
   const { selectedIds } = useCompare();
-  const { savedIds } = useSavedColleges();
+  const { savedColleges, isLoading: savedLoading } = useSavedColleges();
+  const savedCount = savedLoading ? 0 : savedColleges.length;
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(`${path}/`);
 
@@ -118,9 +119,9 @@ export const Navbar: React.FC = () => {
             >
               <Heart className="w-4 h-4 text-rose-400" />
               Saved
-              {savedIds.length > 0 && (
+              {savedCount > 0 && (
                 <span className="ml-1 px-1.5 py-0.5 text-[10px] font-extrabold bg-rose-500 text-white rounded-full">
-                  {savedIds.length}
+                  {savedCount}
                 </span>
               )}
             </Link>

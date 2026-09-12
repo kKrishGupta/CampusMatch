@@ -7,7 +7,8 @@ import { SavedCollegeGrid } from '@/components/saved/SavedCollegeGrid';
 import { useSavedColleges } from '@/hooks/useSavedColleges';
 
 export default function SavedCollegesPage() {
-  const { savedIds } = useSavedColleges();
+  const { savedColleges, isLoading } = useSavedColleges();
+  const count = isLoading ? 0 : savedColleges.length;
 
   return (
     <PageContainer size="wide">
@@ -17,7 +18,7 @@ export default function SavedCollegesPage() {
         </div>
         <h1 className="text-3xl font-black text-slate-900 tracking-tight">Saved Colleges</h1>
         <p className="text-sm text-slate-600 mt-1">
-          Your shortlisted colleges ({savedIds.length} saved). Access their details, compare them, or manage your wishlist anytime.
+          Your shortlisted colleges ({count} saved). Access their details, compare them, or manage your wishlist anytime.
         </p>
       </div>
 

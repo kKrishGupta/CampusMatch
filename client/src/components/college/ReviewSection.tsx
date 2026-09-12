@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { ReviewCard } from './ReviewCard';
 import { ReviewForm } from './ReviewForm';
+import { useToast } from '@/components/ui/Toast';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { MessageSquarePlus, Star } from 'lucide-react';
@@ -19,7 +20,8 @@ export interface ReviewSectionProps {
 }
 
 export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const { showToast } = useToast();
   const router = useRouter();
 
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -49,6 +51,11 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
   }, [loadReviewsData]);
 
   const handleWriteClick = () => {
+    if (!isAuthenticated) {
+      showToast('Please sign in to write a college review.', 'info');
+      router.push('/login');
+      return;
+    }
     setEditingReview(null);
     setIsModalOpen(true);
   };
@@ -129,7 +136,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
       ) : (
         <div className="space-y-4">
           {reviews.map((rev) => (
-            <ReviewCard key={rev.id} review={rev} onEdit={handleEditClick} />
+            <ReviewCard key={rev.id} review={rev} currentUserName={user?.name} onEdit={handleEditClick} />
           ))}
         </div>
       )}

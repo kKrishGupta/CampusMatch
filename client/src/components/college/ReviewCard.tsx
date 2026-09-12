@@ -7,10 +7,13 @@ import { getInitials } from '@/lib/utils';
 
 export interface ReviewCardProps {
   review: Review;
+  currentUserName?: string;
   onEdit?: (review: Review) => void;
 }
 
-export const ReviewCard: React.FC<ReviewCardProps> = ({ review, onEdit }) => {
+export const ReviewCard: React.FC<ReviewCardProps> = ({ review, currentUserName, onEdit }) => {
+  const isAuthor = currentUserName && review.userName && currentUserName.toLowerCase() === review.userName.toLowerCase();
+
   return (
     <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-3">
       {/* User Info Header */}
@@ -36,7 +39,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review, onEdit }) => {
 
         <div className="flex items-center gap-2">
           <span className="text-xs text-slate-400 font-medium">{review.createdAt}</span>
-          {onEdit && (
+          {onEdit && isAuthor && (
             <button
               type="button"
               onClick={() => onEdit(review)}

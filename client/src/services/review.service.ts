@@ -88,7 +88,9 @@ export class ReviewService {
 
   public static async getReviewsByCollegeId(collegeId: string): Promise<Review[]> {
     const all = this.getStoredReviews();
-    const existing = all.filter((r) => r.collegeId === collegeId);
+    const existing = all.filter(
+      (r) => r.collegeId === collegeId || r.collegeId.includes(collegeId) || collegeId.includes(r.collegeId)
+    );
     const defaultReviews = generateDefaultReviews(collegeId);
 
     if (existing.length === 0) {
