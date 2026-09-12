@@ -49,19 +49,11 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
   }, [loadReviewsData]);
 
   const handleWriteClick = () => {
-    if (!isAuthenticated) {
-      router.push('/login?redirect=' + encodeURIComponent(`/colleges/${college.id}`));
-      return;
-    }
     setEditingReview(null);
     setIsModalOpen(true);
   };
 
   const handleEditClick = (review: Review) => {
-    if (!isAuthenticated) {
-      router.push('/login?redirect=' + encodeURIComponent(`/colleges/${college.id}`));
-      return;
-    }
     setEditingReview(review);
     setIsModalOpen(true);
   };

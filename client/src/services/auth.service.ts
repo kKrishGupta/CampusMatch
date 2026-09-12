@@ -4,23 +4,27 @@ const AUTH_USER_KEY = 'campusmatch_auth_user';
 
 const DEFAULT_USER: User = {
   id: 'usr-101',
-  name: 'Devanshu Sharma',
-  email: 'devanshu@example.com',
-  savedCollegeIds: ['iit-delhi', 'bits-pilani'],
-  targetCourse: 'B.Tech Computer Science',
-  targetCity: 'New Delhi',
+  name: 'Krish Gupta',
+  email: 'kg20060220@gmail.com',
+  avatarUrl: 'https://ui-avatars.com/api/?name=Krish+Gupta&background=1E1B4B&color=818CF8&bold=true&size=200',
+  savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd', 'bits-pilani-main-campus'],
+  targetCourse: 'B.Tech Computer Science & Engineering',
+  targetCity: 'Delhi / NCR',
   createdAt: '2026-01-01',
 };
 
 export class AuthService {
   public static getCurrentUser(): User | null {
-    if (typeof window === 'undefined') return null;
+    if (typeof window === 'undefined') return DEFAULT_USER;
     try {
       const data = localStorage.getItem(AUTH_USER_KEY);
-      if (!data) return null;
+      if (!data) {
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(DEFAULT_USER));
+        return DEFAULT_USER;
+      }
       return JSON.parse(data);
     } catch {
-      return null;
+      return DEFAULT_USER;
     }
   }
 
