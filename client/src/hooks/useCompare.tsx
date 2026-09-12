@@ -44,6 +44,13 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      CompareService.clearComparison();
+      setSelectedIds([]);
+      setSelectedColleges([]);
+      setIsLoading(false);
+      return;
+    }
     const ids = CompareService.getSelectedIds();
     setSelectedIds(ids);
     loadColleges(ids);

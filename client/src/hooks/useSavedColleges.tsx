@@ -42,6 +42,12 @@ export const SavedProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setSavedIds([]);
+      setSavedColleges([]);
+      setIsLoading(false);
+      return;
+    }
     const ids = SavedCollegeService.getSavedIds();
     setSavedIds(ids);
     loadSaved(ids);

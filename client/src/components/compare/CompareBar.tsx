@@ -2,14 +2,18 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { X, GitCompare, ArrowRight, Trash2 } from 'lucide-react';
 import { useCompare } from '@/hooks/useCompare';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
 
 export const CompareBar: React.FC = () => {
+  const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
   const { selectedColleges, removeFromCompare, clearCompare } = useCompare();
 
-  if (selectedColleges.length === 0) return null;
+  if (!isAuthenticated || selectedColleges.length === 0 || pathname === '/compare') return null;
 
   const canCompare = selectedColleges.length >= 2;
 
