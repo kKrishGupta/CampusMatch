@@ -174,7 +174,7 @@ To push this repository to GitHub:
 
 ```bash
 # Add origin remote
-git remote add origin https://github.com/<YOUR_USERNAME>/<YOUR_REPOSITORY>.git
+git remote add origin https://github.com/kKrishGupta/CampusMatch.git
 
 # Rename branch to main
 git branch -M main
