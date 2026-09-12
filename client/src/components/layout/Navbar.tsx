@@ -28,7 +28,7 @@ export const Navbar: React.FC = () => {
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(`${path}/`);
 
-  // Compute live search results matching college name, city, state, shortName, or stream
+  // Compute live search results matching college name, city, state, description, or stream
   const searchResults = useMemo(() => {
     if (!navSearch.trim()) return [];
     const q = navSearch.toLowerCase().trim();
@@ -37,7 +37,6 @@ export const Navbar: React.FC = () => {
         c.name.toLowerCase().includes(q) ||
         c.city.toLowerCase().includes(q) ||
         c.state.toLowerCase().includes(q) ||
-        (c.shortName && c.shortName.toLowerCase().includes(q)) ||
         c.description.toLowerCase().includes(q) ||
         c.courses.some((course) => course.name.toLowerCase().includes(q) || course.stream.toLowerCase().includes(q))
     ).slice(0, 5);
@@ -180,7 +179,7 @@ export const Navbar: React.FC = () => {
                       >
                         <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-white/20 shrink-0 bg-slate-800">
                           <Image
-                            src={getCollegeLogoUrl(college)}
+                            src={getCollegeLogoUrl(college.name, college.logoUrl)}
                             alt={college.name}
                             fill
                             sizes="32px"
@@ -200,7 +199,7 @@ export const Navbar: React.FC = () => {
                             <span>•</span>
                             <span className="text-emerald-400 font-semibold flex items-center gap-0.5">
                               <Award className="w-3 h-3 text-emerald-400" />
-                              NIRF #{college.ranking}
+                              {college.nirfRank ? `NIRF #${college.nirfRank}` : college.accreditation}
                             </span>
                           </div>
                         </div>
