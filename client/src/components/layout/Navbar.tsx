@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCompare } from '@/hooks/useCompare';
 import { useSavedColleges } from '@/hooks/useSavedColleges';
 import { MOCK_COLLEGES } from '@/data/colleges';
+import { matchCollegeSearch } from '@/services/college.service';
 import { getCollegeLogoUrl } from '@/lib/utils';
 import { MobileMenu } from './MobileMenu';
 
@@ -28,18 +29,10 @@ export const Navbar: React.FC = () => {
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(`${path}/`);
 
-  // Compute live search results matching college name, city, state, description, or stream
+  // Compute live search results matching college name, city, state, acronyms, or stream
   const searchResults = useMemo(() => {
     if (!navSearch.trim()) return [];
-    const q = navSearch.toLowerCase().trim();
-    return MOCK_COLLEGES.filter(
-      (c) =>
-        c.name.toLowerCase().includes(q) ||
-        c.city.toLowerCase().includes(q) ||
-        c.state.toLowerCase().includes(q) ||
-        c.description.toLowerCase().includes(q) ||
-        c.courses.some((course) => course.name.toLowerCase().includes(q) || course.stream.toLowerCase().includes(q))
-    ).slice(0, 5);
+    return MOCK_COLLEGES.filter((c) => matchCollegeSearch(c, navSearch)).slice(0, 6);
   }, [navSearch]);
 
   // Click outside listener for live search dropdown

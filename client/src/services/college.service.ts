@@ -1,21 +1,59 @@
 import { College, CollegeFilterParams, PaginatedResponse } from '@/types/college';
 import { MOCK_COLLEGES } from '@/data/colleges';
 
+export function matchCollegeSearch(college: College, searchInput?: string): boolean {
+  if (!searchInput || !searchInput.trim()) return true;
+  const rawQ = searchInput.toLowerCase().trim();
+
+  const searchableText = [
+    college.name,
+    college.id,
+    college.slug,
+    college.city,
+    college.state,
+    college.location,
+    college.type,
+    college.affiliation,
+    college.accreditation,
+    college.description,
+    college.aboutText,
+    ...college.courses.map((c) => `${c.name} ${c.stream} ${c.code}`),
+  ]
+    .join(' ')
+    .toLowerCase();
+
+  // Direct exact/substring match
+  if (searchableText.includes(rawQ)) {
+    return true;
+  }
+
+  // Tokenize search query by whitespace / punctuation
+  const tokens = rawQ.split(/[\s,.\-\/]+/).filter((t) => t.length > 0);
+  if (tokens.length === 0) return true;
+
+  // Verify that every search word/token matches somewhere in the searchable text or acronyms
+  return tokens.every((token) => {
+    if (searchableText.includes(token)) return true;
+
+    // Common acronym expansions
+    if (token === 'iit' && (searchableText.includes('indian institute of technology') || searchableText.includes('iit'))) return true;
+    if (token === 'nit' && (searchableText.includes('national institute of technology') || searchableText.includes('nit'))) return true;
+    if (token === 'iiit' && (searchableText.includes('information technology') || searchableText.includes('iiit'))) return true;
+    if (token === 'bits' && (searchableText.includes('birla institute') || searchableText.includes('bits'))) return true;
+    if (token === 'dtu' && (searchableText.includes('delhi technological university') || searchableText.includes('dtu'))) return true;
+    if (token === 'nsut' && (searchableText.includes('netaji subhas') || searchableText.includes('nsut'))) return true;
+
+    return false;
+  });
+}
+
 export class CollegeService {
   public static async getColleges(params: CollegeFilterParams = {}): Promise<PaginatedResponse<College>> {
     let filtered = [...MOCK_COLLEGES];
 
-    // Search query filter (matches name, city, state, courses, description)
+    // Smart tokenized search query filter (matches name, city, state, courses, description, acronyms)
     if (params.search && params.search.trim() !== '') {
-      const q = params.search.toLowerCase().trim();
-      filtered = filtered.filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.city.toLowerCase().includes(q) ||
-          c.state.toLowerCase().includes(q) ||
-          c.description.toLowerCase().includes(q) ||
-          c.courses.some((course) => course.name.toLowerCase().includes(q) || course.stream.toLowerCase().includes(q))
-      );
+      filtered = filtered.filter((c) => matchCollegeSearch(c, params.search));
     }
 
     // State filter
