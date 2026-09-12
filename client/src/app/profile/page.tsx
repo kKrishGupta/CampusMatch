@@ -20,21 +20,30 @@ export default function ProfilePage() {
   if (!isAuthenticated || !user) {
     return (
       <PageContainer size="narrow" className="py-16 text-center">
-        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/90 shadow-md space-y-5">
+        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/90 shadow-md space-y-6">
           <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto border border-blue-100 shadow-xs">
             <UserIcon className="w-8 h-8" />
           </div>
           <div>
             <h2 className="text-2xl font-extrabold text-slate-900">You are currently Signed Out</h2>
-            <p className="text-sm text-slate-600 mt-1">Log in to view your profile, saved colleges, and personalized recommendations.</p>
+            <p className="text-sm text-slate-600 mt-1">Sign in to view your profile, saved colleges, and personalized recommendations.</p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Button variant="brand" onClick={loginAsDemoUser}>
-              Quick Sign In as Krish Gupta
-            </Button>
-            <Link href="/login">
-              <Button variant="outline">Sign In with Credentials</Button>
+            <Link href="/login" className="w-full sm:w-auto">
+              <Button variant="brand" className="w-full">Sign In to Your Account</Button>
             </Link>
+            <Link href="/register" className="w-full sm:w-auto">
+              <Button variant="outline" className="w-full">Create New Account</Button>
+            </Link>
+          </div>
+          <div className="pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              onClick={loginAsDemoUser}
+              className="text-xs font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+            >
+              Or explore with Instant Guest Access →
+            </button>
           </div>
         </div>
       </PageContainer>
