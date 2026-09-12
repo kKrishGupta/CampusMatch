@@ -102,6 +102,7 @@ export const Hero: React.FC = () => {
                     fill
                     sizes="400px"
                     className="object-cover"
+                    priority
                     unoptimized
                   />
                   <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500 text-white shadow-md">

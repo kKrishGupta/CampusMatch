@@ -68,6 +68,7 @@ export const Navbar: React.FC = () => {
                 fill
                 sizes="36px"
                 className="object-cover"
+                priority
                 unoptimized
               />
             </div>
