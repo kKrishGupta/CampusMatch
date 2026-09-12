@@ -10,7 +10,10 @@ export const metadata: Metadata = {
   description: 'CampusMatch helps students discover colleges, search and filter cutoffs, compare fees and placement packages, and read verified student reviews.',
   keywords: 'colleges in india, college discovery, compare colleges, engineering fees, iit placements, bits pilani fees, college reviews',
   icons: {
-    icon: '/image.png',
+    icon: [
+      { url: '/image.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
     shortcut: '/image.png',
     apple: '/image.png',
   },
