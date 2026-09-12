@@ -91,8 +91,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
           <div className="md:col-span-2 space-y-2">
             {[5, 4, 3, 2, 1].map((star) => {
               const count = stats.starCounts[star as 1 | 2 | 3 | 4 | 5] || 0;
-              const total = stats.totalReviews || 1;
-              const percentage = Math.round((count / total) * 100);
+              const starTotal = Object.values(stats.starCounts).reduce((a, b) => a + b, 0) || 1;
+              const percentage = Math.round((count / starTotal) * 100);
 
               return (
                 <div key={star} className="flex items-center gap-3 text-xs">
