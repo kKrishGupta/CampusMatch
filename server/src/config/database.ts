@@ -11,7 +11,7 @@ export class DatabaseConfig {
     try {
       const uri = this.getConnectionString();
       await mongoose.connect(uri);
-      Logger.info(`[Database] MongoDB connected successfully to: ${uri}`);
+      Logger.info('[Database] MongoDB connected successfully');
       return true;
     } catch (error) {
       Logger.error('[Database] MongoDB connection error:', error);
