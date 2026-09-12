@@ -29,7 +29,7 @@ export default function ProfilePage() {
             <p className="text-sm text-slate-600 mt-1">Sign in to view your profile, saved colleges, and personalized recommendations.</p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link href="/login" className="w-full sm:w-auto">
+            <Link href="/login?redirect=/profile" className="w-full sm:w-auto">
               <Button variant="brand" className="w-full">Sign In to Your Account</Button>
             </Link>
             <Link href="/register" className="w-full sm:w-auto">

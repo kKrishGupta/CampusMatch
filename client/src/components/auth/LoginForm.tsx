@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/Button';
 export const LoginForm: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/colleges';
+  const redirect = searchParams.get('redirect') || '/profile';
 
   const { login } = useAuth();
   const { showToast } = useToast();
@@ -25,12 +25,18 @@ export const LoginForm: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleQuickFill = () => {
+    setEmail('kg20060220@gmail.com');
+    setPassword('password123');
+    setErrors({});
+  };
+
   const validate = () => {
     const errs: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
       errs.email = 'Email address is required.';
-    } else if (!email.includes('@') || !email.includes('.')) {
+    } else if (!email.includes('@')) {
       errs.email = 'Please enter a valid email address.';
     }
 
@@ -64,6 +70,17 @@ export const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="p-3 rounded-xl bg-indigo-50/80 border border-indigo-100/90 flex items-center justify-between gap-2 text-xs">
+        <span className="text-indigo-900 font-medium">Quick testing credentials:</span>
+        <button
+          type="button"
+          onClick={handleQuickFill}
+          className="font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer shrink-0"
+        >
+          Auto-fill Demo Details →
+        </button>
+      </div>
+
       {errors.general && (
         <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
           {errors.general}
