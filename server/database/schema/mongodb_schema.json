@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CampusMatch MongoDB Schema",
+  "collections": {
+    "users": {
+      "bsonType": "object",
+      "required": ["name", "email"],
+      "properties": {
+        "_id": { "bsonType": "objectId" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "passwordHash": { "type": "string" },
+        "savedCollegeIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "colleges": {
+      "bsonType": "object",
+      "required": ["name", "slug", "city", "state", "type"],
+      "properties": {
+        "_id": { "bsonType": "objectId" },
+        "name": { "type": "string" },
+        "slug": { "type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "feesAnnual": { "type": "number" },
+        "rating": { "type": "number" },
+        "averagePlacementLpa": { "type": "number" },
+        "highestPlacementLpa": { "type": "number" },
+        "type": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "reviews": {
+      "bsonType": "object",
+      "required": ["collegeId", "userName", "rating", "comment"],
+      "properties": {
+        "_id": { "bsonType": "objectId" },
+        "collegeId": { "type": "string" },
+        "userName": { "type": "string" },
+        "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "title": { "type": "string" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
