@@ -29,10 +29,21 @@ export class AuthService {
         return DEFAULT_USER;
       }
       const parsed = JSON.parse(data);
-      if (parsed.avatarUrl?.includes('photo-1534528741775-53994a69daeb')) {
+      let modified = false;
+
+      if (parsed.name === 'Kg20060220' || parsed.email?.includes('kg20060220')) {
+        parsed.name = 'Krish Gupta';
+        modified = true;
+      }
+      if (!parsed.avatarUrl || parsed.avatarUrl.includes('photo-1534528741775-53994a69daeb')) {
         parsed.avatarUrl = DEFAULT_USER.avatarUrl;
+        modified = true;
+      }
+
+      if (modified) {
         localStorage.setItem(AUTH_USER_KEY, JSON.stringify(parsed));
       }
+
       return parsed;
     } catch {
       return null;
@@ -40,7 +51,6 @@ export class AuthService {
   }
 
   public static async login(credentials: LoginCredentials): Promise<{ user: User; message: string }> {
-    // Simulate network delay
     await new Promise((res) => setTimeout(res, 300));
 
     if (!credentials.email || !credentials.password) {
@@ -55,12 +65,19 @@ export class AuthService {
       throw new Error('Password must be at least 6 characters.');
     }
 
-    const name = credentials.email.split('@')[0];
+    const emailLower = credentials.email.toLowerCase();
+    const isKrish = emailLower.includes('kg20060220') || emailLower.includes('krish');
+    const rawName = credentials.email.split('@')[0];
+    const formattedName = isKrish ? 'Krish Gupta' : rawName.charAt(0).toUpperCase() + rawName.slice(1);
+
     const user: User = {
       id: `usr-${Date.now()}`,
-      name: name.charAt(0).toUpperCase() + name.slice(1),
+      name: formattedName,
       email: credentials.email,
-      savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd'],
+      avatarUrl: DEFAULT_USER.avatarUrl,
+      savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd', 'bits-pilani-main-campus'],
+      targetCourse: isKrish ? 'B.Tech Computer Science & Engineering' : 'Computer Science',
+      targetCity: 'Delhi / NCR',
       createdAt: new Date().toISOString().split('T')[0],
     };
 
@@ -95,8 +112,10 @@ export class AuthService {
       id: `usr-${Date.now()}`,
       name: data.name,
       email: data.email,
-      savedCollegeIds: [],
-      targetCourse: data.targetCourse,
+      avatarUrl: DEFAULT_USER.avatarUrl,
+      savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd'],
+      targetCourse: data.targetCourse || 'Computer Science',
+      targetCity: 'Delhi / NCR',
       createdAt: new Date().toISOString().split('T')[0],
     };
 
