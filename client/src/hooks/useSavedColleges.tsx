@@ -5,6 +5,7 @@ import { College } from '@/types/college';
 import { SavedCollegeService } from '@/services/saved.service';
 import { CollegeService } from '@/services/college.service';
 import { useToast } from '@/components/ui/Toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface SavedContextType {
   savedIds: string[];
@@ -17,6 +18,7 @@ interface SavedContextType {
 const SavedContext = createContext<SavedContextType | undefined>(undefined);
 
 export const SavedProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, isAuthenticated } = useAuth();
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [savedColleges, setSavedColleges] = useState<College[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,7 +45,7 @@ export const SavedProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const ids = SavedCollegeService.getSavedIds();
     setSavedIds(ids);
     loadSaved(ids);
-  }, [loadSaved]);
+  }, [loadSaved, user, isAuthenticated]);
 
   const toggleSave = useCallback(
     (college: College) => {

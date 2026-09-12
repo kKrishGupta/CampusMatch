@@ -9,13 +9,13 @@ export class SavedCollegeService {
     if (typeof window === 'undefined') return [];
     try {
       const currentUser = AuthService.getCurrentUser();
-      if (currentUser?.savedCollegeIds) {
-        return currentUser.savedCollegeIds;
+      if (currentUser) {
+        return currentUser.savedCollegeIds || [];
       }
       const data = localStorage.getItem(SAVED_STORAGE_KEY);
-      return data ? JSON.parse(data) : ['iit-delhi', 'bits-pilani', 'dtu-delhi'];
+      return data ? JSON.parse(data) : [];
     } catch {
-      return ['iit-delhi', 'bits-pilani'];
+      return [];
     }
   }
 

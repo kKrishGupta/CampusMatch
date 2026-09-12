@@ -131,6 +131,8 @@ export class AuthService {
     await new Promise((res) => setTimeout(res, 100));
     if (typeof window !== 'undefined') {
       localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.removeItem('campusmatch_saved_colleges');
+      localStorage.removeItem('campusmatch_compare_colleges');
       localStorage.setItem(LOGGED_OUT_KEY, 'true');
     }
   }

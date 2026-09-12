@@ -5,6 +5,7 @@ import { College } from '@/types/college';
 import { CompareService } from '@/services/compare.service';
 import { CollegeService } from '@/services/college.service';
 import { useToast } from '@/components/ui/Toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface CompareContextType {
   selectedIds: string[];
@@ -19,6 +20,7 @@ interface CompareContextType {
 const CompareContext = createContext<CompareContextType | undefined>(undefined);
 
 export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, isAuthenticated } = useAuth();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [selectedColleges, setSelectedColleges] = useState<College[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -45,7 +47,7 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const ids = CompareService.getSelectedIds();
     setSelectedIds(ids);
     loadColleges(ids);
-  }, [loadColleges]);
+  }, [loadColleges, user, isAuthenticated]);
 
   const toggleCompare = useCallback(
     (college: College) => {
