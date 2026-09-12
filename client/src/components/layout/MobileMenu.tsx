@@ -142,17 +142,25 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             </div>
 
             <div className="p-5 border-t border-indigo-900 bg-white/5">
-              <Button
-                variant="outline"
-                className="w-full justify-center text-rose-400 border-rose-500/30 hover:bg-rose-500/10"
-                leftIcon={<LogOut className="w-4 h-4" />}
-                onClick={() => {
-                  logout();
-                  onClose();
-                }}
-              >
-                Logout Account
-              </Button>
+              {isAuthenticated ? (
+                <Button
+                  variant="outline"
+                  className="w-full justify-center text-rose-400 border-rose-500/30 hover:bg-rose-500/10"
+                  leftIcon={<LogOut className="w-4 h-4" />}
+                  onClick={async () => {
+                    await logout();
+                    onClose();
+                  }}
+                >
+                  Logout Account
+                </Button>
+              ) : (
+                <Link href="/login" onClick={onClose} className="block w-full">
+                  <Button variant="brand" className="w-full justify-center">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

@@ -13,10 +13,16 @@ const DEFAULT_USER: User = {
   createdAt: '2026-01-01',
 };
 
+const LOGGED_OUT_KEY = 'campusmatch_logged_out';
+
 export class AuthService {
   public static getCurrentUser(): User | null {
     if (typeof window === 'undefined') return DEFAULT_USER;
     try {
+      const loggedOut = localStorage.getItem(LOGGED_OUT_KEY);
+      if (loggedOut === 'true') {
+        return null;
+      }
       const data = localStorage.getItem(AUTH_USER_KEY);
       if (!data) {
         localStorage.setItem(AUTH_USER_KEY, JSON.stringify(DEFAULT_USER));
@@ -29,13 +35,13 @@ export class AuthService {
       }
       return parsed;
     } catch {
-      return DEFAULT_USER;
+      return null;
     }
   }
 
   public static async login(credentials: LoginCredentials): Promise<{ user: User; message: string }> {
     // Simulate network delay
-    await new Promise((res) => setTimeout(res, 400));
+    await new Promise((res) => setTimeout(res, 300));
 
     if (!credentials.email || !credentials.password) {
       throw new Error('Please fill in all required fields.');
@@ -54,11 +60,12 @@ export class AuthService {
       id: `usr-${Date.now()}`,
       name: name.charAt(0).toUpperCase() + name.slice(1),
       email: credentials.email,
-      savedCollegeIds: ['iit-delhi', 'dtu-delhi'],
+      savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd'],
       createdAt: new Date().toISOString().split('T')[0],
     };
 
     if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOGGED_OUT_KEY);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
     }
 
@@ -66,7 +73,7 @@ export class AuthService {
   }
 
   public static async register(data: RegisterData): Promise<{ user: User; message: string }> {
-    await new Promise((res) => setTimeout(res, 400));
+    await new Promise((res) => setTimeout(res, 300));
 
     if (!data.name || !data.email || !data.password || !data.confirmPassword) {
       throw new Error('All fields are required.');
@@ -94,6 +101,7 @@ export class AuthService {
     };
 
     if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOGGED_OUT_KEY);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
     }
 
@@ -101,21 +109,23 @@ export class AuthService {
   }
 
   public static async logout(): Promise<void> {
-    await new Promise((res) => setTimeout(res, 200));
+    await new Promise((res) => setTimeout(res, 100));
     if (typeof window !== 'undefined') {
       localStorage.removeItem(AUTH_USER_KEY);
+      localStorage.setItem(LOGGED_OUT_KEY, 'true');
     }
   }
 
   public static setDemoUser(): User {
     if (typeof window !== 'undefined') {
+      localStorage.removeItem(LOGGED_OUT_KEY);
       localStorage.setItem(AUTH_USER_KEY, JSON.stringify(DEFAULT_USER));
     }
     return DEFAULT_USER;
   }
 
   public static async updateProfile(data: Partial<User>): Promise<User> {
-    await new Promise((res) => setTimeout(res, 300));
+    await new Promise((res) => setTimeout(res, 200));
     const currentUser = this.getCurrentUser();
     if (!currentUser) {
       throw new Error('User is not logged in.');

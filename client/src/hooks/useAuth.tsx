@@ -11,6 +11,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
+  loginAsDemoUser: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
 }
 
@@ -60,6 +61,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setStatus('unauthenticated');
   }, []);
 
+  const loginAsDemoUser = useCallback(() => {
+    const demoUser = AuthService.setDemoUser();
+    setUser(demoUser);
+    setStatus('authenticated');
+  }, []);
+
   const updateProfile = useCallback(async (data: Partial<User>) => {
     const updated = await AuthService.updateProfile(data);
     setUser(updated);
@@ -74,6 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         register,
         logout,
+        loginAsDemoUser,
         updateProfile,
       }}
     >

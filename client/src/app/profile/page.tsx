@@ -13,22 +13,27 @@ import { SavedCollegeGrid } from '@/components/saved/SavedCollegeGrid';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
 
 export default function ProfilePage() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, loginAsDemoUser } = useAuth();
   const { savedIds } = useSavedColleges();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   if (!isAuthenticated || !user) {
     return (
       <PageContainer size="narrow" className="py-16 text-center">
-        <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900">Please Sign In</h2>
-          <p className="text-sm text-slate-600">You must be logged in to view your profile and account settings.</p>
-          <div className="flex items-center justify-center gap-3 pt-2">
-            <Link href="/login?redirect=/profile">
-              <Button variant="brand">Sign In</Button>
-            </Link>
-            <Link href="/register">
-              <Button variant="outline">Create Account</Button>
+        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200/90 shadow-md space-y-5">
+          <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto border border-blue-100 shadow-xs">
+            <UserIcon className="w-8 h-8" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-extrabold text-slate-900">You are currently Signed Out</h2>
+            <p className="text-sm text-slate-600 mt-1">Log in to view your profile, saved colleges, and personalized recommendations.</p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <Button variant="brand" onClick={loginAsDemoUser}>
+              Quick Sign In as Krish Gupta
+            </Button>
+            <Link href="/login">
+              <Button variant="outline">Sign In with Credentials</Button>
             </Link>
           </div>
         </div>

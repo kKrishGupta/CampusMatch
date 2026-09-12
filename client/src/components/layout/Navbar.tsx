@@ -165,9 +165,10 @@ export const Navbar: React.FC = () => {
                       <Heart className="w-4 h-4 text-rose-400" /> Saved Colleges
                     </Link>
                     <button
-                      onClick={() => {
-                        logout();
+                      onClick={async () => {
+                        await logout();
                         setUserDropdownOpen(false);
+                        router.push('/login');
                       }}
                       className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-rose-400 hover:bg-rose-500/10 border-t border-indigo-900/80 transition-colors cursor-pointer"
                     >
@@ -178,10 +179,10 @@ export const Navbar: React.FC = () => {
               </div>
             ) : (
               <Link
-                href="/profile"
+                href="/login"
                 className="px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-md shadow-blue-500/20"
               >
-                My Account
+                Sign In
               </Link>
             )}
           </div>
