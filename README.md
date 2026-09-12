@@ -1,6 +1,14 @@
 # 🎓 CampusMatch — Modern Higher Education Discovery Platform
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-campus--match--client.vercel.app-2563EB?style=for-the-badge&logo=vercel&logoColor=white)](https://campus-match-client.vercel.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kKrishGupta/CampusMatch)
+
 > **CampusMatch** is a premium EdTech SaaS application designed for students and parents across India to explore, filter, compare, and bookmark top higher education institutes. Features a rich dataset of **100+ top engineering & management colleges**, 5-year JEE cutoff rank trends, connectivity details (airports, railway stations), placement statistics, and real user reviews.
+
+---
+
+## 🌐 Live Production Link
+👉 **Live Web App**: [https://campus-match-client.vercel.app](https://campus-match-client.vercel.app)
 
 ---
 
