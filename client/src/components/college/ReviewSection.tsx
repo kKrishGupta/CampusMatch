@@ -26,6 +26,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
   const [stats, setStats] = useState<ReviewRatingStats | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [editingReview, setEditingReview] = useState<Review | null>(null);
 
   const loadReviewsData = useCallback(async () => {
     setIsLoading(true);
@@ -52,6 +53,16 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
       router.push('/login?redirect=' + encodeURIComponent(`/colleges/${college.id}`));
       return;
     }
+    setEditingReview(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditClick = (review: Review) => {
+    if (!isAuthenticated) {
+      router.push('/login?redirect=' + encodeURIComponent(`/colleges/${college.id}`));
+      return;
+    }
+    setEditingReview(review);
     setIsModalOpen(true);
   };
 
@@ -126,7 +137,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
       ) : (
         <div className="space-y-4">
           {reviews.map((rev) => (
-            <ReviewCard key={rev.id} review={rev} />
+            <ReviewCard key={rev.id} review={rev} onEdit={handleEditClick} />
           ))}
         </div>
       )}
@@ -136,11 +147,16 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({ college }) => {
         <ReviewForm
           collegeId={college.id}
           collegeName={college.name}
+          initialData={editingReview}
           onSuccess={() => {
             setIsModalOpen(false);
+            setEditingReview(null);
             loadReviewsData();
           }}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => {
+            setIsModalOpen(false);
+            setEditingReview(null);
+          }}
         />
       </Modal>
     </div>

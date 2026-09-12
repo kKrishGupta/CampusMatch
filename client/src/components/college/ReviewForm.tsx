@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
-import { ReviewFormData } from '@/types/review';
+import { Review, ReviewFormData } from '@/types/review';
 import { ReviewService } from '@/services/review.service';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 export interface ReviewFormProps {
   collegeId: string;
   collegeName: string;
+  initialData?: Review | null;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -19,19 +20,20 @@ export interface ReviewFormProps {
 export const ReviewForm: React.FC<ReviewFormProps> = ({
   collegeId,
   collegeName,
+  initialData,
   onSuccess,
   onCancel,
 }) => {
   const { user } = useAuth();
   const { showToast } = useToast();
 
-  const [rating, setRating] = useState<number>(5);
+  const [rating, setRating] = useState<number>(initialData?.rating || 5);
   const [hoverRating, setHoverRating] = useState<number>(0);
-  const [title, setTitle] = useState<string>('');
-  const [comment, setComment] = useState<string>('');
-  const [pros, setPros] = useState<string>('');
-  const [cons, setCons] = useState<string>('');
-  const [course, setCourse] = useState<string>(user?.targetCourse || 'B.Tech Student');
+  const [title, setTitle] = useState<string>(initialData?.title || '');
+  const [comment, setComment] = useState<string>(initialData?.comment || '');
+  const [pros, setPros] = useState<string>(initialData?.pros?.join(', ') || '');
+  const [cons, setCons] = useState<string>(initialData?.cons?.join(', ') || '');
+  const [course, setCourse] = useState<string>(initialData?.userCourse || user?.targetCourse || 'B.Tech Student');
 
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -59,11 +61,16 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
         pros,
         cons,
         course,
-        passoutYear: new Date().getFullYear(),
+        passoutYear: initialData?.passoutYear || new Date().getFullYear(),
       };
 
-      await ReviewService.createReview(collegeId, formData, user?.name || 'Verified Student');
-      showToast('Thank you! Your review has been published.', 'success');
+      if (initialData) {
+        await ReviewService.updateReview(initialData.id, formData);
+        showToast('Your review has been updated successfully!', 'success');
+      } else {
+        await ReviewService.createReview(collegeId, formData, user?.name || 'Verified Student');
+        showToast('Thank you! Your review has been published.', 'success');
+      }
       onSuccess();
     } catch (err: any) {
       setError(err.message || 'Failed to submit review.');
@@ -75,7 +82,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1">
-        <h4 className="font-bold text-slate-900 text-base">Write a Review for {collegeName}</h4>
+        <h4 className="font-bold text-slate-900 text-base">
+          {initialData ? `Update Review for ${collegeName}` : `Write a Review for ${collegeName}`}
+        </h4>
         <p className="text-xs text-slate-500">Share your honest campus experience to help aspiring students.</p>
       </div>
 
@@ -162,7 +171,7 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
           Cancel
         </Button>
         <Button type="submit" variant="primary" isLoading={isSubmitting}>
-          Submit Review
+          {initialData ? 'Update Review' : 'Submit Review'}
         </Button>
       </div>
     </form>

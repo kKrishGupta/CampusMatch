@@ -4,6 +4,7 @@ import { MapPin, Globe, Award, Building, Plane, Train, Navigation, BarChart2 } f
 import { College } from '@/types/college';
 import { Rating } from '@/components/ui/Rating';
 import { Badge } from '@/components/ui/Badge';
+import { getCollegeBannerUrl, getCollegeLogoUrl } from '@/lib/utils';
 import { SaveButton } from './SaveButton';
 import { CompareButton } from './CompareButton';
 
@@ -15,22 +16,23 @@ export const CollegeHeader: React.FC<CollegeHeaderProps> = ({ college }) => {
   const [bannerError, setBannerError] = useState(false);
   const [logoError, setLogoError] = useState(false);
 
+  const bannerSrc = bannerError ? getCollegeBannerUrl(college.id) : getCollegeBannerUrl(college.id, college.bannerUrl);
+  const logoSrc = logoError ? getCollegeLogoUrl(college.name) : getCollegeLogoUrl(college.name, college.logoUrl);
+
   return (
     <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden mb-8">
       {/* Banner Section with Hero Fallback Gradient */}
       <div className="relative w-full h-44 sm:h-60 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 overflow-hidden">
-        {!bannerError && college.bannerUrl && (
-          <Image
-            src={college.bannerUrl}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-70"
-            onError={() => setBannerError(true)}
-            unoptimized
-          />
-        )}
+        <Image
+          src={bannerSrc}
+          alt={`${college.name} campus banner`}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-80"
+          onError={() => setBannerError(true)}
+          unoptimized
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
 
         {/* Badges on Top Right of Hero Banner */}
@@ -51,22 +53,16 @@ export const CollegeHeader: React.FC<CollegeHeaderProps> = ({ college }) => {
         {/* Logo & Top Action Buttons Row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 -mt-12 sm:-mt-16 mb-4">
           {/* Logo Box */}
-          <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-white border-4 border-white shadow-xl overflow-hidden shrink-0 z-10 flex items-center justify-center">
-            {!logoError && college.logoUrl ? (
-              <Image
-                src={college.logoUrl}
-                alt={`${college.name} logo`}
-                fill
-                sizes="128px"
-                className="object-cover"
-                onError={() => setLogoError(true)}
-                unoptimized
-              />
-            ) : (
-              <div className="w-full h-full bg-brand-gradient text-white font-extrabold text-2xl flex items-center justify-center">
-                {college.name.substring(0, 2).toUpperCase()}
-              </div>
-            )}
+          <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-indigo-950 border-4 border-white shadow-xl overflow-hidden shrink-0 z-10 flex items-center justify-center">
+            <Image
+              src={logoSrc}
+              alt={`${college.name} logo`}
+              fill
+              sizes="128px"
+              className="object-cover"
+              onError={() => setLogoError(true)}
+              unoptimized
+            />
           </div>
 
           {/* Action buttons (Compare & Save) */}

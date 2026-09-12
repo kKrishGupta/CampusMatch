@@ -5,6 +5,7 @@ import { X, ArrowUpRight } from 'lucide-react';
 import { College } from '@/types/college';
 import { Badge } from '@/components/ui/Badge';
 import { Rating } from '@/components/ui/Rating';
+import { getCollegeLogoUrl } from '@/lib/utils';
 
 export interface CompareCollegeCardProps {
   college: College;
@@ -25,9 +26,9 @@ export const CompareCollegeCard: React.FC<CompareCollegeCardProps> = ({ college,
       </button>
 
       <div className="space-y-3">
-        <div className="relative w-14 h-14 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden">
+        <div className="relative w-14 h-14 rounded-xl bg-indigo-950 border border-slate-200 overflow-hidden shadow-xs">
           <Image
-            src={college.logoUrl}
+            src={getCollegeLogoUrl(college.name, college.logoUrl)}
             alt={`${college.name} logo`}
             fill
             sizes="56px"

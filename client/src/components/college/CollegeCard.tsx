@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, TrendingUp, Award, ArrowUpRight } from 'lucide-react';
 import { College } from '@/types/college';
-import { formatCurrency, formatLpa } from '@/lib/utils';
+import { formatCurrency, formatLpa, getCollegeLogoUrl } from '@/lib/utils';
 import { Rating } from '@/components/ui/Rating';
 import { Badge } from '@/components/ui/Badge';
 import { SaveButton } from './SaveButton';
@@ -16,6 +16,7 @@ export interface CollegeCardProps {
 
 export const CollegeCard: React.FC<CollegeCardProps> = ({ college, className = '' }) => {
   const [logoError, setLogoError] = useState(false);
+  const logoSrc = logoError ? getCollegeLogoUrl(college.name) : getCollegeLogoUrl(college.name, college.logoUrl);
 
   return (
     <div
@@ -25,22 +26,16 @@ export const CollegeCard: React.FC<CollegeCardProps> = ({ college, className = '
         {/* Header section: Logo, Name, Location, Badges */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-start gap-3.5 min-w-0">
-            <div className="relative w-12 h-12 rounded-xl bg-slate-100 border border-slate-200/80 overflow-hidden shrink-0 flex items-center justify-center">
-              {!logoError && college.logoUrl ? (
-                <Image
-                  src={college.logoUrl}
-                  alt={`${college.name} logo`}
-                  fill
-                  sizes="48px"
-                  className="object-cover"
-                  onError={() => setLogoError(true)}
-                  unoptimized
-                />
-              ) : (
-                <div className="w-full h-full bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center">
-                  {college.name.substring(0, 2).toUpperCase()}
-                </div>
-              )}
+            <div className="relative w-12 h-12 rounded-xl bg-indigo-950 border border-slate-200/80 overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
+              <Image
+                src={logoSrc}
+                alt={`${college.name} logo`}
+                fill
+                sizes="48px"
+                className="object-cover"
+                onError={() => setLogoError(true)}
+                unoptimized
+              />
             </div>
 
             <div className="min-w-0">

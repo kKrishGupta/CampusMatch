@@ -83,4 +83,65 @@ export class ReviewService {
 
     return newReview;
   }
+
+  public static async updateReview(reviewId: string, formData: ReviewFormData): Promise<Review> {
+    await new Promise((res) => setTimeout(res, 300));
+
+    if (!formData.rating || formData.rating < 1 || formData.rating > 5) {
+      throw new Error('Please select a star rating from 1 to 5.');
+    }
+
+    if (!formData.comment || formData.comment.trim().length < 10) {
+      throw new Error('Review comment must be at least 10 characters long.');
+    }
+
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(REVIEWS_STORAGE_KEY);
+      let list: Review[] = stored ? JSON.parse(stored) : [];
+      let updatedReview: Review | null = null;
+
+      list = list.map((rev) => {
+        if (rev.id === reviewId) {
+          updatedReview = {
+            ...rev,
+            rating: formData.rating,
+            title: formData.title || rev.title,
+            comment: formData.comment.trim(),
+            userCourse: formData.course || rev.userCourse,
+            passoutYear: formData.passoutYear || rev.passoutYear,
+            pros: formData.pros ? formData.pros.split(',').map((p) => p.trim()).filter(Boolean) : rev.pros,
+            cons: formData.cons ? formData.cons.split(',').map((c) => c.trim()).filter(Boolean) : rev.cons,
+          };
+          return updatedReview;
+        }
+        return rev;
+      });
+
+      if (!updatedReview) {
+        const initial = INITIAL_REVIEWS.find((r) => r.id === reviewId);
+        updatedReview = {
+          id: reviewId,
+          collegeId: initial?.collegeId || '',
+          userName: initial?.userName || 'Verified Student',
+          userCourse: formData.course || initial?.userCourse || 'B.Tech Student',
+          passoutYear: formData.passoutYear || initial?.passoutYear || new Date().getFullYear(),
+          rating: formData.rating,
+          title: formData.title || initial?.title || 'Updated Review',
+          comment: formData.comment.trim(),
+          pros: formData.pros ? formData.pros.split(',').map((p) => p.trim()).filter(Boolean) : initial?.pros || [],
+          cons: formData.cons ? formData.cons.split(',').map((c) => c.trim()).filter(Boolean) : initial?.cons || [],
+          createdAt: initial?.createdAt || new Date().toISOString().split('T')[0],
+          isVerifiedStudent: true,
+          likesCount: initial?.likesCount || 0,
+        };
+        list.unshift(updatedReview);
+      }
+
+      localStorage.setItem(REVIEWS_STORAGE_KEY, JSON.stringify(list));
+      return updatedReview;
+    }
+
+    throw new Error('Local storage unavailable');
+  }
 }
+

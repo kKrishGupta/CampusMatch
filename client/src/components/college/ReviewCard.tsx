@@ -2,14 +2,15 @@ import React from 'react';
 import { Review } from '@/types/review';
 import { Rating } from '@/components/ui/Rating';
 import { Badge } from '@/components/ui/Badge';
-import { CheckCircle2, ThumbsUp, User as UserIcon } from 'lucide-react';
+import { CheckCircle2, Edit3 } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
 
 export interface ReviewCardProps {
   review: Review;
+  onEdit?: (review: Review) => void;
 }
 
-export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+export const ReviewCard: React.FC<ReviewCardProps> = ({ review, onEdit }) => {
   return (
     <div className="p-5 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-3">
       {/* User Info Header */}
@@ -33,7 +34,19 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           </div>
         </div>
 
-        <span className="text-xs text-slate-400 font-medium">{review.createdAt}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-400 font-medium">{review.createdAt}</span>
+          {onEdit && (
+            <button
+              type="button"
+              onClick={() => onEdit(review)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200/80 transition-colors"
+              title="Edit Review"
+            >
+              <Edit3 className="w-3 h-3" /> Edit
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Rating & Title */}
