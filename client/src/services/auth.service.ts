@@ -4,8 +4,8 @@ const AUTH_USER_KEY = 'campusmatch_auth_user';
 
 const DEFAULT_USER: User = {
   id: 'usr-101',
-  name: 'Krish Gupta',
-  email: 'kg20060220@gmail.com',
+  name: 'Student Explorer',
+  email: 'student@campusmatch.in',
   avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&h=200&q=80',
   savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd', 'bits-pilani-main-campus'],
   targetCourse: 'B.Tech Computer Science & Engineering',
@@ -31,10 +31,6 @@ export class AuthService {
       const parsed = JSON.parse(data);
       let modified = false;
 
-      if (parsed.name === 'Kg20060220' || parsed.email?.includes('kg20060220')) {
-        parsed.name = 'Krish Gupta';
-        modified = true;
-      }
       if (!parsed.avatarUrl || parsed.avatarUrl.includes('photo-1534528741775-53994a69daeb')) {
         parsed.avatarUrl = DEFAULT_USER.avatarUrl;
         modified = true;
@@ -65,10 +61,8 @@ export class AuthService {
       throw new Error('Password must be at least 6 characters.');
     }
 
-    const emailLower = credentials.email.toLowerCase();
-    const isKrish = emailLower.includes('kg20060220') || emailLower.includes('krish');
     const rawName = credentials.email.split('@')[0];
-    const formattedName = isKrish ? 'Krish Gupta' : rawName.charAt(0).toUpperCase() + rawName.slice(1);
+    const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
 
     const user: User = {
       id: `usr-${Date.now()}`,
@@ -76,7 +70,7 @@ export class AuthService {
       email: credentials.email,
       avatarUrl: DEFAULT_USER.avatarUrl,
       savedCollegeIds: ['indian-institute-of-technology-madras-iitm', 'indian-institute-of-technology-delhi-iitd', 'bits-pilani-main-campus'],
-      targetCourse: isKrish ? 'B.Tech Computer Science & Engineering' : 'Computer Science',
+      targetCourse: 'B.Tech Computer Science & Engineering',
       targetCity: 'Delhi / NCR',
       createdAt: new Date().toISOString().split('T')[0],
     };

@@ -26,7 +26,7 @@ export const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleQuickFill = () => {
-    setEmail('kg20060220@gmail.com');
+    setEmail('student@campusmatch.in');
     setPassword('password123');
     setErrors({});
   };
