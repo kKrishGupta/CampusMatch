@@ -16,6 +16,8 @@ const app = express();
 // Permissive CORS setup for Vercel deployments & local testing
 const allowedOrigins = [
   'https://campus-match-client.vercel.app',
+  'https://campus-match-client-git-main-krish-guptas-projects-5351c1cf.vercel.app',
+  'https://campus-match-client-msia81pgr-krish-guptas-projects-5351c1cf.vercel.app',
   'http://localhost:3000',
   'http://localhost:3001',
 ];
